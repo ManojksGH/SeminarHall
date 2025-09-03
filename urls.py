@@ -1,23 +1,33 @@
-from django.urls import path
-from . import views
+"""
+URL configuration for dbms project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path, include
+from django.http import HttpResponse
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import render, get_object_or_404, redirect
 
-app_name = 'seminar'
+def home_view(request):
+    return HttpResponse(render(request,"home.html"))
+
+
 
 urlpatterns = [
-    
-    path('login/', views.login, name='login'),
-    path('userdashboard/', views.userdashboard, name='userdashboard'),
-    path('admindashboard/', views.admindashboard, name='admindashboard'),
-    path('logout/', views.user_logout, name='logout'),
-    path('halls/', views.hall_list, name='hall_list'),
-    path('bookings/', views.booking_list, name='booking_list'),
-    path('booking/create/', views.booking_create, name='booking_create'),
-    path('register_user/', views.register_user, name='register_user'),  # URL for Register User
-    path('update_booking_status/', views.update_booking_status, name='update_booking_status'),  # URL for Update Booking Status
-    path('update_hall_list/', views.update_hall_list, name='update_hall_list'),  # URL for Update Hall List
-    path('check_status/', views.check_status, name='check_status'),
-    path('change_password/', views.change_password, name='change_password'),
-    path('edit_hall/<int:hall_id>/', views.edit_hall, name='edit_hall'),
+    path('admin/', admin.site.urls),  # Admin interface
+    path('seminar/', include('seminar.urls')),  # Include URLs from the seminar app
+    path('', home_view, name='home'),  # Root URL
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
